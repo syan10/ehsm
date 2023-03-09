@@ -9,4 +9,4 @@ RUN chmod 744 /home/start_dkeycache.sh
 # run ehsm-dkeycache
 WORKDIR /home/ehsm/out/ehsm-dkeycache
 #CMD ["./ehsm-dkeycache", "-i", "$DKEYSERVER_IP", "-p", "$DKEYSERVER_PORT"]
-ENTRYPOINT ["sh","/home/start_dkeycache.sh"]
+ENTRYPOINT ["/home/start_dkeycache.sh"]

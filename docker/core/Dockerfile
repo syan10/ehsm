@@ -24,4 +24,4 @@ RUN npm install
 EXPOSE 9000
 
 # run ehsm_kms_service
-CMD ["sh", "/home/start_ehsm-kms.sh"]
+CMD ["/home/start_ehsm-kms.sh"]

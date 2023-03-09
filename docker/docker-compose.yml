@@ -12,6 +12,35 @@ services:
       - COUCHDB_USER=${COUCHDB_USER}
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
 
+  # eHSM PCCS Server service
+  ehsm_pccs:
+    container_name: c_ehsm_pccs
+    build: 
+      context: pccs
+      args:
+       http_proxy: ${http_proxy}
+       https_proxy: ${http_proxy}
+    image: "ehsm_pccs:${EHSM_VERSION_STR}"
+    ports:
+      - "${PCCS_PORT}:8800"
+    environment:
+      - net=host
+      - no_proxy=${no_proxy}
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - HOST_IP=${HOST_IP}
+      - EHSM_PCCS_PORT=${PCCS_PORT}
+      - EHSM_PCCS_API_KEY=${PCCS_API_KEY}
+      - EHSM_PCCS_USER_PASSWORD=${PCCS_USER_PASSWORD}
+      - EHSM_PCCS_ADMIN_PASSWORD=${PCCS_ADMIN_PASSWORD}
+      - EHSM_CONFIG_OPENSSL_COUNTRYNAME=${OPENSSL_COUNTRYNAME}
+      - EHSM_CONFIG_OPENSSL_LOCALITYNAME=${OPENSSL_LOCALITYNAME}
+      - EHSM_CONFIG_OPENSSL_ORGANIZATIONNAME=${OPENSSL_ORGANIZATIONNAME}
+      - EHSM_CONFIG_OPENSSL_ORGANIZATIONALUNITNAME=${OPENSSL_ORGANIZATIONALUNITNAME}
+      - EHSM_CONFIG_OPENSSL_COMMONNAME=${OPENSSL_COMMONNAME}
+      - EHSM_CONFIG_OPENSSL_EMAILADDRESS=${OPENSSL_EMAILADDRESS}
+      - EHSM_CONFIG_OPENSSL_SERVER_CERT_PASSWORD=${OPENSSL_SERVER_CERT_PASSWORD}
+
   # eHSM Base Images
   #   just for build a base image.
   ehsm_base:
@@ -49,6 +78,7 @@ services:
       - /dev/sgx/provision
     depends_on:
       - ehsm_base
+      - ehsm_pccs
 
   # eHSM Domain Key Cache service
   dkeycache:
@@ -74,6 +104,7 @@ services:
       - /dev/sgx/provision
     depends_on:
       - dkeyserver
+      - ehsm_pccs
 
   # eHSM KMS service
   ehsmKMS:
